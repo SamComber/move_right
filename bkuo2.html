@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Assignment Two</title>
+
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+
+<link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
+<style>
+html, body, #map {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+</style>
+</head>
+<body>    
+<div id="map"></div>
+
+<!-- include google maps lib -->
+<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<!-- include cartodb.js library -->
+<script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/cartodb.js"></script>
+  <!--Load the AJAX API-->
+<script>
+
+function main() {
+
+    var map = L.map('map', { 
+      center: [53.40, -2.89],
+      zoom: 12,
+      zoomControl: true
+    });
+
+    L.tileLayer('https://maps.nlp.nokia.com/maptiler/v2/maptile/newest/normal.day.grey/{z}/{x}/{y}/256/png8?lg=eng&token=61YWYROufLu_f8ylE0vn0Q&app_id=qIWDkliFCtLntLma2e6O', {
+      attribution: 'Nokia'
+    }).addTo(map);
+
+
+    var currentHover,
+        newFeature = null
+
+    cartodb.createLayer(map, 'http://samcomber1.cartodb.com/u/samcomber1/api/v2/viz/4be10006-0971-11e7-88a5-0ef24382571b/viz.json')
+      .addTo(map)
+      .on('done', function(layer) {
+
+      }).on('error', function() {
+        console.log("some error occurred");
+      });
+  }
+
+
+  window.onload = main;
+</script>
+</body>
+
+</html>

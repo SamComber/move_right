@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<codeBook xsi:schemaLocation="ddi:codebook:2_5 http://www.ddialliance.org/Specification/DDI-Codebook/2.5/XMLSchema/codebook.xsd" version="2.5" xmlns="ddi:codebook:2_5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<docDscr>
+		<citation>
+			<titlStmt>
+				<titl>CDRC 2014 IUC Geodata Pack - Liverpool (E08000012)</titl>
+			</titlStmt>
+		</citation>
+	</docDscr>
+	<stdyDscr>
+		<citation>
+			<titlStmt>
+				<titl>CDRC 2014 IUC Geodata Pack - Liverpool (E08000012)
+				</titl>
+				<altTitl></altTitl>
+			</titlStmt>
+			<rspStmt>
+				<AuthEnty>Alex Singleton</AuthEnty>
+				<AuthEnty>Hai Nguyen</AuthEnty>
+				<othId></othId>
+			</rspStmt>
+			<prodStmt>
+				<producer>ESRC Consumer Data Research Centre </producer>
+				<copyright>CDRC IUC Geodata Pack by the ESRC Consumer Data Research Centre; Contains National Statistics data Crown copyright and database right 2015; Contains Ordnance Survey data Crown copyright and database right 2015</copyright>
+				<fundAg>Economic and Social Research Council</fundAg>
+<grantNo agency="Economic and Social Research Council">ES/L003546/1</grantNo>
+				<grantNo agency="Economic and Social Research Council">ES/L011840/1</grantNo>
+							
+			</prodStmt>
+			<distStmt>
+				<contact>data@cdrc.ac.uk</contact>
+				<depositr>Alex Singleton, University of Liverpool</depositr>
+				
+				<distDate date="2015-07-09T00:00:00Z">2015-07-09</distDate>
+			</distStmt>
+			<serStmt>
+				<serName>CDRC 2014 IUC Geodata Pack</serName>
+			</serStmt>
+			<verStmt>
+				<version date="2015-07-09T00:00:00Z">
+					1.0</version>
+			</verStmt>
+		</citation>
+		<stdyInfo>
+			<subject>
+				<keyword>Lower Layer Super Output Area</keyword>
+				<keyword>Internet User Classification</keyword>
+				<keyword>Local Authority</keyword>
+				<keyword>2011</keyword>
+				<keyword>Census</keyword>
+				<keyword>LSOA</keyword>
+				<keyword>Liverpool</keyword>
+				<keyword>E08000012</keyword>
+				<topcClas>Internet and Social Media</topcClas>
+				<topcClas>Demographics</topcClas>
+			</subject>
+			<abstract>The 2014 Internet User Classification (IUC) is a UK geodemographic of Internet use and engagement. This CDRC 2014 IUC Geodata Pack provides a mappable version of this classification for the Local Authority District: Liverpool (E08000012)
+			</abstract>
+			<sumDscr>
+				<timePrd>2011</timePrd>
+				<collDate>2011</collDate>
+				<nation>England</nation>
+				<geogCover>Liverpool</geogCover>
+				<geogUnit>Local Authority District, Lower Layer Super Output Area</geogUnit>
+				<anlyUnit></anlyUnit>
+				<universe></universe>
+				<dataKind>Shapefile</dataKind>
+			</sumDscr>
+		</stdyInfo>
+		<method>
+			<dataColl>
+				<timeMeth></timeMeth>
+				<dataCollector>Office for National Statistics</dataCollector>
+				<dataCollector>Oxford Internet Institute</dataCollector>
+				<dataCollector>Offcom</dataCollector>
+				<sampProc></sampProc>
+				<deviat></deviat>
+				<collMode></collMode>
+				<sources><dataSrc>2014 Internet User Classification</dataSrc></sources>
+				<weight></weight>
+			</dataColl>
+		</method>
+		<dataAccs>
+			<setAvail>
+				<accsPlac>ESRC Consumer Data Research Centre</accsPlac>
+			</setAvail>
+			<useStmt>
+				<restrctn></restrctn>
+				<contact>data@cdrc.ac.uk</contact>
+			</useStmt>
+		</dataAccs>
+		<othrStdyMat>
+			<relStdy></relStdy>
+			<relPubl></relPubl>
+			<othRefs></othRefs>
+		</othrStdyMat>
+	</stdyDscr>
+</codeBook>

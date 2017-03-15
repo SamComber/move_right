@@ -1,0 +1,119 @@
+* {
+	font-family: 'Montserrat';
+}
+
+html, body, #map {
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+.cartodb-tooltip-content-wrapper {
+	padding: 10px;
+	background-color: #fff;
+}
+
+.cartodb-tooltip {
+	background: rgba(0,0,0, 0.1)
+}
+
+div.cartodb-infobox {
+	/*background: black;*/
+    background: rgba(0, 0, 0, 0.6);
+    width: 300px !important;
+}
+
+div.cartodb-tooltip-content-wrapper {
+    background: rgba(0, 0, 0, 0.3);
+	color: #fff;
+}
+
+.lsoa {
+	padding: 20px;
+	color: #fff;
+	text-align:center;
+}
+
+.lsoa-title {
+	font-size: 1.5em;
+}
+
+p {
+	margin: none !important;
+}
+
+
+div.cartodb-infobox {
+	padding: 0 !important;
+	border: none;
+}
+
+p.muted {
+	color: #999999;
+}
+
+p.muted:not(:first-child) {
+	/*margin-top: 10px;*/
+}
+
+.pull-right {
+	float: right;
+}
+
+.spacer {
+    border-top: 1px dashed rgba(255,255,255, 0.2);
+    height: 1px;
+    width: 100%;
+    margin: 4px 0 2px 0;
+}
+
+
+
+.cartodb-popup {
+	display: none; /* disable click popup */
+}
+
+#legend {
+	position: absolute;
+	bottom: 14px;
+	right: 0px;
+}
+
+.container-fluid {
+	background-color: #000;
+}
+
+.container-fluid a {
+	color: #fff;
+}
+
+.container-fluid a:hover {
+	color: #228B22;
+}
+
+/* LEGEND */
+
+div.cartodb-legend {
+	background-color: #000;
+	bottom: 90px !important;
+}
+
+.density {
+	color: #fff !important;
+}
+
+
+/* ABOUT PAGE */
+
+.about {
+	margin-top: 20px;
+}
+
+.real-estate {
+    width:100%;
+    height: 230px;
+}
+
+.about-text {
+	text-align: justify;
+}
