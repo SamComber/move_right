@@ -7,15 +7,7 @@
     <link rel="shortcut icon" href="http://cartodb.com/assets/favicon.ico" />
     <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <!-- Optional theme -->
-    <!--[if lte IE 8]>
-      <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
-    <![endif]-->
-
     <link rel="stylesheet" href="styles.css">    
   </head>
   <body>
@@ -32,13 +24,15 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="index.html"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+            <li class="active opts"><a href="index.html"><span class="glyphicon glyphicon-home"></span> Home</a></li>
             <li><a href="about.html"><span class="glyphicon glyphicon-info-sign"></span> About</a></li>
-            <li><a href="#" class="legendtoggle"><span class="glyphicon glyphicon-wrench"></span> Toggle Legend</a></li>
+            <li><a href="#" class="legendtoggle"><span class="glyphicon glyphicon-wrench"></span> Toggle IMD Legend</a></li>
           </ul>
         </div>
       </div>
     <div id="map"></div>
+    <div id="chart_div" style="display:none;"></div>
+    <div id="d3chart"> </div>
 
     <!-- include google maps lib -->
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
@@ -48,52 +42,39 @@
       <!--Load the AJAX API-->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 
     <script>
-      // google.setOnLoadCallback(draw_chart)
 
-        // toggle legend
-        $(document).ready(function() {
-          $('.legendtoggle').click(function() {
-            $('.cartodb-legend').toggle();
-          })
-        });
+      // toggle legend
+      $(document).ready(function() {
+        $('.legendtoggle').click(function() {
+          $('.cartodb-legend').toggle();
+        })
+      });
 
-        var INFOWINDOW_TEMPLATE = [
-          '<div class="lsoa"><p class="muted lsoa-title">{{lookup_wd1}}</p></div>',
-          ' <div class="cartodb-tooltip-content-wrapper">',
-          '<p class="muted">About the neighbourhood</p>IMD Score: <span class="pull-right">{{imd_score}}</span>',
-          '<div id="chart_div"><div class="spacer"></div>',
-          '<p class="muted">Avg. sold price<span class="pull-right">Houses sold (2015)</span></p>£{{md_2015_fo}}<span class="pull-right">{{fr_2015}}</span>',
-          '<p class="muted">Total properties<span class="pull-right">Predominant build period</span> </p>{{voaage_all}}<span class="pull-right">{{voaage_m_1}} (<i>{{percent_ma}}</i>%)</span><div class="spacer"></div>',
-          '<p class="muted">Amenities: average distance</p>Nearest school: <span class="pull-right">{{dists_scho}} metres</span><p>Nearest train station:    <span class="pull-right">{{dists_rail}} metres</span></p></div>',
-          '<div class="spacer"></div>',
-          '<p class="muted">Total pop.<span class="pull-right">JSA Claimants</span></p>',
-          '{{voaage_all}}<span class="pull-right">{{claimant_1}}</span>',          
-          '<div class="spacer"></div>',
-          '<p class="muted">Social media activity</p></div><div id="chart_div">',
-          '<script></scr' + 'ipt>',
-          '</div>'
-        ].join('');
+      // load google viz charts lib
+      google.load('visualization', '1.0', {'packages':['corechart']});
 
-              google.load('visualization', '1.0', {'packages':['corechart']});
-
-
-      function draw_chart() {
-        var data = google.visualization.arrayToDataTable([
-          ['', 'population'],
-          ['max',  33],
-          ['min',  33]
-        ]);
-
-        var options = {
-          title: ' population',
-          legend: { position: "none" },
-          width: 300,
-        };
-        var chart = new google.visualization.ColumnChart(document.getElementById("chart_div"));
-        chart.draw(data, options);
-      }
+      var INFOWINDOW_TEMPLATE = [
+        '<div class="lsoa"><p class="muted lsoa-title">{{lookup_wd1}}</p></div>',
+        '<div class="cartodb-tooltip-content-wrapper">',
+        '<p class="muted">About the neighbourhood</p>IMD Score: <span class="pull-right">{{imd_score}}</span>',
+        '<div id="d3chart"><script>\r\n\r\n\r\n  var data = [\r\n    {\r\n        \"imd\": \"IMD Score\",\r\n        \"value\": parseFloat("{{imd_score}}")\r\n    },\r\n        {\r\n        \"imd\": \"Mean\",\r\n        \"value\": 44.10\r\n    }\r\n    ]\r\n\r\n var margin = {top: 40, right: 20, bottom: 30, left: 40},\r\n    width = 200 - margin.left - margin.right,\r\n    height = 200 - margin.top - margin.bottom;\r\n\r\n\r\nvar x = d3.scale.ordinal()\r\n    .rangeRoundBands([0, width], .1);\r\n\r\nvar y = d3.scale.linear()\r\n    .range([height, 0]);\r\n\r\nvar xAxis = d3.svg.axis()\r\n    .scale(x)\r\n    .orient(\"bottom\")\r\n    \/\/ .style(\"color\", \"#FFF\")\r\n\r\nvar yAxis = d3.svg.axis()\r\n    .scale(y)\r\n    .orient(\"left\")\r\n\r\n\r\nvar svg = d3.select(\"#d3chart\").append(\"svg\")\r\n    .attr(\"width\", width + margin.left + margin.right)\r\n    .attr(\"height\", height + margin.top + margin.bottom)\r\n  .append(\"g\")\r\n    .attr(\"transform\", \"translate(\" + margin.left + \",\" + margin.top + \")\");\r\n\r\nx.domain(data.map(function(d) { return d.imd; }));\r\ny.domain([0, d3.max(data, function(d) { return d.value; })]);\r\n\r\nsvg.append(\"g\")\r\n  .attr(\"class\", \"x axis\")\r\n  .style(\"fill\", \"white\")\r\n  .attr(\"transform\", \"translate(0,\" + height + \")\")\r\n  .call(xAxis);\r\n\r\nsvg.append(\"g\")\r\n  .style(\"fill\", \"white\")\r\n  .attr(\"class\", \"y axis\")\r\n  .call(yAxis)\r\n\r\n\r\nsvg.selectAll(\".bar\")\r\n  .data(data)\r\n.enter().append(\"rect\")\r\n  .attr(\"class\", \"bar\")\r\n  .attr(\"x\", function(d) { return x(d.imd); })\r\n  .attr(\"width\", x.rangeBand())\r\n  .attr(\"y\", function(d) { return y(d.value); })\r\n  .attr(\"height\", function(d) { return height - y(d.value); })\r\n\r\n<\/script>\r\n</div>',
+        '<div class="spacer"></div>',
+        '<p class="muted">Avg. sold price<span class="pull-right">Houses sold (2015)</span></p>£{{md_2015_fo}}<span class="pull-right">{{fr_2015}}</span>',
+        '<p class="muted">Total properties<span class="pull-right">Predominant build period</span> </p>{{voaage_all}}<span class="pull-right">{{voaage_m_1}} (<i>{{percent_ma}}</i>%)</span><div class="spacer"></div>',
+        '<p class="muted">Amenities: average distance</p>Nearest school: <span class="pull-right">{{dists_scho}} metres</span><p>Nearest train station:    <span class="pull-right">{{dists_rail}} metres</span></p>',
+        '<div class="spacer"></div>',
+        '<p class="muted">Total pop.<span class="pull-right">JSA Claimants</span></p>',
+        '{{voaage_all}}<span class="pull-right">{{claimant_1}}</span>',          
+        '<div class="spacer"></div>',
+        '<p class="muted">Social media activity</p>',
+        '<div id="chart_div" style="background: rgba(0, 0, 0);"><script type="text/javascript">var d = parseFloat("{{tweets}}");google.charts.setOnLoadCallback(function(){var i=google.visualization.arrayToDataTable([["Tweets","Mean",{role:"style"}],["Tweets",d,"#FF0000"],["Mean", 440,"#FFFF00"]]);;var a={title:"Number of Tweets",legend: {position: "none"}, backgroundColor: {fill: "transparent", opacity: 100},legendTextStyle: { color: "#FFF" },  titleTextStyle: { color: "#FFF" }, pieHole: 0.6,vAxis : {textStyle:{color:"#FFF"}},hAxis : {textStyle:{color:"#FFF"}}},e=new google.visualization.PieChart(document.getElementById("chart_div"));e.draw(i,a)});',
+        '</scr' + 'ipt></div>',
+        ''
+      ].join('');
 
       var base = 'https://samcomber.carto.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM imdz_2 WHERE cartodb_id =';
       var layerGroup = new L.LayerGroup();
@@ -115,7 +96,6 @@
         cartodb.createLayer(map, 'http://samcomber.cartodb.com/u/samcomber/api/v2/viz/9d8f5308-0912-11e7-abc6-0e98b61680bf/viz.json')
           .addTo(map)
           .on('done', function(layer) {
-            console.log(layer)
 
             layer.getSubLayer(0).setInteraction(true);
             layer.on('featureOver', function(ev, pos, latlng, data) {
@@ -146,9 +126,12 @@
             })
 
               // add custom hoverable infowindow
-              cartodb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['cartodb_id', 'percent_ma','lookup_wd1','lsoa11cd', 'imd_score', 'md_2015_fo', 'fr_2015', 'dists_scho', 'voaage_m_1', 'grp_nm', 'voaage_all', 'claimant_1', 'dists_rail']); 
+              cartodb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['cartodb_id', 'percent_ma','lookup_wd1','lsoa11cd', 'imd_score', 'md_2015_fo', 'fr_2015', 'dists_scho', 'voaage_m_1', 'grp_nm', 'voaage_all', 'claimant_1', 'dists_rail', ' tweets']); 
               layer.setInteraction(true);
               var sublayer = layer.getSubLayer(0);
+
+
+
 
               layer.leafletMap.viz.addOverlay({
                    type: 'infobox',
@@ -158,13 +141,13 @@
                    fields: [{ lsoa11cd: 'lsoa11cd' }]
               });
 
-              // build custom density legend
-              var legend = new cdb.geo.ui.Legend.Density({
-                // title: "IMD Score",
-                left: "0", right: "100", colors: [ "#58A062", "#F07971", "#54BFDE", "#9BC562", "#FABB5C" ]
-              });
-              // append to map and render
-              $('#map').append(legend.render().el);
+              // // build custom density legend
+              // var legend = new cdb.geo.ui.Legend.Density({
+              //   // title: "IMD Score",
+              //   left: "0", right: "100", colors: [ "#58A062", "#F07971", "#54BFDE", "#9BC562", "#FABB5C" ]
+              // });
+              // // append to map and render
+              // $('#map').append(legend.render().el);
 
             }).on('error', function() {
               console.log("some error occurred");
