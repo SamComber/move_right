@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="styles.css">    
   </head>
   <body>
-    
+    <!-- use bootstrap navbar template for navigation -->
     <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -31,8 +31,9 @@
         </div>
       </div>
     <div id="map"></div>
+    <!-- create placeholder objects in DOM so ajax called JS in infowindow can execute correctly -->
     <div id="chart_div" style="display:none;"></div>
-    <div id="d3chart"> </div>
+    <div id="d3chart" style="display:none;"> </div>
     <span id="col"></span>
 
     <!-- include google maps lib -->
@@ -44,25 +45,21 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
-
     <script>
-
-      // toggle legend
-      $(document).ready(function() {
-        $('.legendtoggle').click(function() {
-          $('.cartodb-legend').toggle();
-        })
-      });
 
       // load google viz charts lib
       google.load('visualization', '1.0', {'packages':['corechart']});
 
       var INFOWINDOW_TEMPLATE = [
-        '<div class="lsoa"><p class="muted lsoa-title">{{lookup_wd1}}</p></div>',
+        '<div class="lsoa">',
+        '<p class="muted lsoa-title">{{lookup_wd1}}</p>',
+        '</div>',
         '<div class="cartodb-tooltip-content-wrapper">',
         '<p class="muted">About the neighbourhood</p>IMD Score: <span id="col" class="pull-right">{{imd_score}}</span>',
-        '<div id="d3chart"><script>var d=parseFloat(\"{{imd_score}}\")\r\nswitch(true) {\r\n  case d >= 70:\r\n    var col = \"#d7191c\"\r\n    break;\r\n  case d >= 60:\r\n    var col = \"#fdae61\";\r\n    break;\r\n  case d >= 40:\r\n    var col = \"#ffffbf\";\r\n    break;\r\n  case d >= 20:\r\n    var col = \"#abdda4\";\r\n    break;\r\n  case d >= 3:\r\n    var col = \"#2b83ba\";\r\n    break;\r\n}document.getElementById("col").style.color = col;\r\n\r\n  var data = [\r\n    {\r\n        \"imd\": \"IMD score\",\r\n        \"value\": d\r\n    },\r\n        {\r\n        \"imd\": \"Mean\",\r\n        \"value\": 44.10\r\n    }\r\n    ]\r\n\r\n var margin = {top: 40, right: 20, bottom: 30, left: 40},\r\n    width = 200 - margin.left - margin.right,\r\n    height = 200 - margin.top - margin.bottom;\r\n\r\n\r\nvar x = d3.scale.ordinal()\r\n    .rangeRoundBands([0, width], .1);\r\n\r\nvar y = d3.scale.linear()\r\n    .range([height, 0]);\r\n\r\nvar xAxis = d3.svg.axis()\r\n    .scale(x)\r\n    .orient(\"bottom\")\r\n    \/\/ .style(\"color\", \"#FFF\")\r\n\r\nvar yAxis = d3.svg.axis()\r\n    .scale(y)\r\n    .orient(\"left\")\r\n\r\n\r\nvar svg = d3.select(\"#d3chart\").append(\"svg\")\r\n    .attr(\"width\", width + margin.left + margin.right)\r\n    .attr(\"height\", height + margin.top + margin.bottom)\r\n  .append(\"g\")\r\n    .attr(\"transform\", \"translate(\" + margin.left + \",\" + margin.top + \")\");\r\n\r\nx.domain(data.map(function(d) { return d.imd; }));\r\ny.domain([0, d3.max(data, function(d) { return d.value; })]);\r\n\r\nsvg.append(\"g\")\r\n  .attr(\"class\", \"x axis\")\r\n  .style(\"fill\", \"white\")\r\n  .attr(\"transform\", \"translate(0,\" + height + \")\")\r\n  .call(xAxis);\r\n\r\nsvg.append(\"g\")\r\n  .style(\"fill\", \"white\")\r\n  .attr(\"class\", \"y axis\")\r\n  .call(yAxis)\r\n\r\n\r\nsvg.selectAll(\".bar\")\r\n  .data(data)\r\n.enter().append(\"rect\")\r\n .style("fill", col) .attr(\"class\", \"bar\")\r\n  .attr(\"x\", function(d) { return x(d.imd); })\r\n  .attr(\"width\", x.rangeBand())\r\n  .attr(\"y\", function(d) { return y(d.value); })\r\n  .attr(\"height\", function(d) { return height - y(d.value); })\r\n\r\n<\/script>\r\n</div>',
+        '<div id="d3chart">',
+        
+        // d3 script below is escaped to allow rendering in infowindow (unminified and unescaped version in appendix - WITH COMMENTS!)
+        '<script>var d=parseFloat(\"{{imd_score}}\")\r\nswitch(true) {\r\n  case d >= 61.1:\r\n    var col = \"#d7191c\"\r\n    break;\r\n  case d >= 49.9:\r\n    var col = \"#fdae61\";\r\n    break;\r\n  case d >= 34.9:\r\n    var col = \"#ffffbf\";\r\n    break;\r\n  case d >= 20.5:\r\n    var col = \"#abdda4\";\r\n    break;\r\n  case d >= 3:\r\n    var col = \"#2b83ba\";\r\n    break;\r\n}document.getElementById("col").style.color = col;\r\n\r\n  var data = [\r\n    {\r\n        \"imd\": \"IMD score\",\r\n        \"value\": d\r\n    },\r\n        {\r\n        \"imd\": \"Mean\",\r\n        \"value\": 44.10\r\n    }\r\n    ]\r\n\r\n var margin = {top: 40, right: 20, bottom: 30, left: 40},\r\n    width = 200 - margin.left - margin.right,\r\n    height = 200 - margin.top - margin.bottom;\r\n\r\n\r\nvar x = d3.scale.ordinal()\r\n    .rangeRoundBands([0, width], .1);\r\n\r\nvar y = d3.scale.linear()\r\n    .range([height, 0]);\r\n\r\nvar xAxis = d3.svg.axis()\r\n    .scale(x)\r\n    .orient(\"bottom\")\r\n    \/\/ .style(\"color\", \"#FFF\")\r\n\r\nvar yAxis = d3.svg.axis()\r\n    .scale(y)\r\n    .orient(\"left\")\r\n\r\n\r\nvar svg = d3.select(\"#d3chart\").append(\"svg\")\r\n    .attr(\"width\", width + margin.left + margin.right)\r\n    .attr(\"height\", height + margin.top + margin.bottom)\r\n  .append(\"g\")\r\n    .attr(\"transform\", \"translate(\" + margin.left + \",\" + margin.top + \")\");\r\n\r\nx.domain(data.map(function(d) { return d.imd; }));\r\ny.domain([0, d3.max(data, function(d) { return d.value; })]);\r\n\r\nsvg.append(\"g\")\r\n  .attr(\"class\", \"x axis\")\r\n  .style(\"fill\", \"white\")\r\n  .attr(\"transform\", \"translate(0,\" + height + \")\")\r\n  .call(xAxis);\r\n\r\nsvg.append(\"g\")\r\n  .style(\"fill\", \"white\")\r\n  .attr(\"class\", \"y axis\")\r\n  .call(yAxis)\r\n\r\n\r\nsvg.selectAll(\".bar\")\r\n  .data(data)\r\n.enter().append(\"rect\")\r\n .style("fill", col) .attr(\"class\", \"bar\")\r\n  .attr(\"x\", function(d) { return x(d.imd); })\r\n  .attr(\"width\", x.rangeBand())\r\n  .attr(\"y\", function(d) { return y(d.value); })\r\n  .attr(\"height\", function(d) { return height - y(d.value); })\r\n\r\n<\/script>\r\n</div>',
         '<div class="spacer"></div>',
         '<p class="muted">Avg. sold price<span class="pull-right">Houses sold (2015)</span></p>£{{md_2015_fo}}<span class="pull-right">{{fr_2015}}</span>',
         '<p class="muted">Total properties<span class="pull-right">Predominant build period</span> </p>{{voaage_all}}<span class="pull-right">{{voaage_m_1}} (<i>{{percent_ma}}</i>%)</span><div class="spacer"></div>',
@@ -72,42 +69,56 @@
         '{{voaage_all}}<span class="pull-right">{{claimant_1}}</span>',          
         '<div class="spacer"></div>',
         '<p class="muted">Social media activity</p>',
-        '<div id="chart_div" style="background: rgba(0, 0, 0);"><script type="text/javascript">var d = parseFloat("{{tweets}}");google.charts.setOnLoadCallback(function(){var i=google.visualization.arrayToDataTable([["Tweets","Mean",{role:"style"}],["Tweets",d,"#FF0000"],["Mean", 440,"#FFFF00"]]);;var a={title:"Number of Tweets",legend: {position: "none"}, backgroundColor: {fill: "transparent", opacity: 100},legendTextStyle: { color: "#FFF" },  titleTextStyle: { color: "#FFF" }, pieHole: 0.6,vAxis : {textStyle:{color:"#FFF"}},hAxis : {textStyle:{color:"#FFF"}}},e=new google.visualization.ColumnChart(document.getElementById("chart_div"));e.draw(i,a)});',
-        '</scr' + 'ipt></div>',
+        '<div id="chart_div" style="background: rgba(0, 0, 0);">',
+
+        // SCRIPT BELLOW USES GOOGLE CHARTS API TO BUILD SOCIAL MEDIA ACTIVITY BAR CHART
+        '<script type="text/javascript">var d = parseFloat("{{tweets}}");google.charts.setOnLoadCallback(function(){var i=google.visualization.arrayToDataTable([["Tweets","Mean",{role:"style"}],["Tweets",d,"#FF0000"],["Mean", 440,"#FFFF00"]]);;var a={title:"Number of Tweets",legend: {position: "none"}, backgroundColor: {fill: "transparent", opacity: 100},legendTextStyle: { color: "#FFF" },  titleTextStyle: { color: "#FFF" }, pieHole: 0.6,vAxis : {textStyle:{color:"#FFF"}},hAxis : {textStyle:{color:"#FFF"}}},e=new google.visualization.ColumnChart(document.getElementById("chart_div"));e.draw(i,a)});',
+        '</scr' + 'ipt>',
+        '</div>',
         ''
       ].join('');
 
+      // define variable for grabbing individual regions of shapefile
       var base = 'https://samcomber.carto.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM imdz_2 WHERE cartodb_id =';
+
+      // create layergroup 
       var layerGroup = new L.LayerGroup();
       var currentHover,
           newFeature = null;
 
      function main() {
 
+        // define base map options
         var map = L.map('map', { 
           center: [53.40, -2.89],
           zoom: 12,
           zoomControl: true
         });
 
+        // use aesthetically pleasing nokia basemap
         L.tileLayer('https://maps.nlp.nokia.com/maptiler/v2/maptile/newest/normal.day.grey/{z}/{x}/{y}/256/png8?lg=eng&token=61YWYROufLu_f8ylE0vn0Q&app_id=qIWDkliFCtLntLma2e6O', {
           attribution: 'Nokia'
         }).addTo(map);
 
+        // render layers from carto apito plot on map
         cartodb.createLayer(map, 'http://samcomber.cartodb.com/u/samcomber/api/v2/viz/e4541a6a-0969-11e7-9fa3-0e3a376473ab/viz.json')
           .addTo(map)
           .on('done', function(layer) {
 
+            // on completion get sublayer to grab cartodb_ids for hover
             layer.getSubLayer(0).setInteraction(true);
             layer.on('featureOver', function(ev, pos, latlng, data) {
-              // console.log("featureover")
 
+              // if current hover id is not equal to null...
               if (data.cartodb_id != currentHover) {
+
+                // firstly clear layer
                 layerGroup.clearLayers();
 
                 // ajax call to get json with SELECT WHERE query
                 $.getJSON(base + data.cartodb_id, function(res) {
 
+                  // then style region being hovered over 
                   newFeature = L.geoJson(res, {
                     style: {
                       "color": "#fff",
@@ -115,14 +126,16 @@
                       "opacity": 1                   
                     }
                   });
+                  // add styling to layer and then map
                   layerGroup.addLayer(newFeature);
                   layerGroup.addTo(map);
 
                 })  
+                // assign current hover as id of region user is hovering over
                 currentHover = data.cartodb_id;              
               }
             }).on('featureOut', function() {
-              // console.log('featureout')
+              // on hover out of region, clear layer
               layerGroup.clearLayers();
             })
 
@@ -131,9 +144,7 @@
               layer.setInteraction(true);
               var sublayer = layer.getSubLayer(0);
 
-
-
-
+              // add infowindow and fix position to viewport
               layer.leafletMap.viz.addOverlay({
                    type: 'infobox',
                    layer: sublayer,
@@ -142,20 +153,13 @@
                    fields: [{ lsoa11cd: 'lsoa11cd' }]
               });
 
-              // // build custom density legend
-              // var legend = new cdb.geo.ui.Legend.Density({
-              //   // title: "IMD Score",
-              //   left: "0", right: "100", colors: [ "#58A062", "#F07971", "#54BFDE", "#9BC562", "#FABB5C" ]
-              // });
-              // // append to map and render
-              // $('#map').append(legend.render().el);
-
+            // for debugging
             }).on('error', function() {
               console.log("some error occurred");
             });
       }
 
-
+      // render script when window loads
       window.onload = main;
     </script>
 

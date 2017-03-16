@@ -70,7 +70,7 @@ p.muted:not(:first-child) {
 }
 
 svg {
-	display: block;
+	display: block; /* center d3 chart in infowindow */
 	margin: auto;
 }
 
