@@ -34,6 +34,7 @@
           <ul class="nav navbar-nav">
             <li class="active"><a href="index.html"><span class="glyphicon glyphicon-home"></span> Home</a></li>
             <li><a href="about.html"><span class="glyphicon glyphicon-info-sign"></span> About</a></li>
+            <li><a href="#" class="legendtoggle"><span class="glyphicon glyphicon-wrench"></span> Toggle Legend</a></li>
           </ul>
         </div>
       </div>
@@ -49,7 +50,14 @@
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
     <script>
-      // google.setOnLoadCallback(draw_chart);
+      // google.setOnLoadCallback(draw_chart)
+
+        // toggle legend
+        $(document).ready(function() {
+          $('.legendtoggle').click(function() {
+            $('.cartodb-legend').toggle();
+          })
+        });
 
         var INFOWINDOW_TEMPLATE = [
           '<div class="lsoa"><p class="muted lsoa-title">{{lookup_wd1}}</p></div>',
@@ -152,7 +160,7 @@
 
               // build custom density legend
               var legend = new cdb.geo.ui.Legend.Density({
-                title: "IMD Score",
+                // title: "IMD Score",
                 left: "0", right: "100", colors: [ "#58A062", "#F07971", "#54BFDE", "#9BC562", "#FABB5C" ]
               });
               // append to map and render
