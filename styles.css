@@ -121,11 +121,12 @@ div.cartodb-legend {
 }
 
 .bar {
-  fill: orangered;
+  fill: #ffcc00
+;
 }
 
 .bar:hover {
-  fill:  yellow;
+  fill:  orangered;
 }
 
 .x.axis path {
