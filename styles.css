@@ -43,6 +43,10 @@ p {
 	margin: none !important;
 }
 
+div.cartodb-timeslider .slider-wrapper {
+	width: 330px;
+	margin-bottom: 20px;
+}
 
 div.cartodb-infobox {
 	padding: 0 !important;

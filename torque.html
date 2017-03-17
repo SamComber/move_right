@@ -67,8 +67,8 @@
           'Map {',
           '-torque-frame-count:24;',
           '-torque-animation-duration:30;',
-          '-torque-time-attribute:"cartodb_id";',
-          '-torque-aggregation-function:"count(cartodb_id)";',
+          '-torque-time-attribute:"hour";',
+          '-torque-aggregation-function:"count(hour)";',
           '-torque-resolution:4;',
           '-torque-data-aggregation:linear;',
           '}',
@@ -76,7 +76,7 @@
             'image-filters: colorize-alpha(blue, cyan, #008000, yellow , orange, red);',
             'marker-file: url(http://s3.amazonaws.com/com.cartodb.assets.static/alphamarker.png);',
             'marker-fill-opacity: 0.4*[value];',
-            'marker-width: 35;',
+            'marker-width: 15;',
           '}'
         ].join('\n');
 
@@ -90,8 +90,8 @@
             user_name: "samcomber",
             tile_style: CARTOCSS
             }
-        }).done(function(layer) {
-          map.addLayer(layer);
+        }).done(function(vis, layer) {
+          map.addLayer(vis, layer);
         });
 }
       // render script when window loads
