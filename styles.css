@@ -137,6 +137,15 @@ div.cartodb-legend {
   display: none;
 }
 
+
+.glyphicon-arrow-up {
+	color: #00FF00;
+}
+
+.glyphicon-arrow-down {
+	color: red;
+}
+
 /* ABOUT PAGE */
 
 .about {
