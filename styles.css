@@ -146,6 +146,10 @@ div.cartodb-legend {
 	color: red;
 }
 
+.cartodb-timeslider {
+	margin-bottom: 40px !important;
+}
+
 /* ABOUT PAGE */
 
 .about {
