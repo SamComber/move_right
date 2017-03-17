@@ -24,9 +24,9 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active opts"><a href="index.html"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+            <li class="active opts"><a href="index.html"><span class="glyphicon glyphicon-home"></span> Base Map</a></li>
+            <li><a href="torque.html"><span class="glyphicon glyphicon-info-sign"></span> Time Series Map</a></li>
             <li><a href="about.html"><span class="glyphicon glyphicon-info-sign"></span> About</a></li>
-            <li><a href="#" class="legendtoggle"><span class="glyphicon glyphicon-wrench"></span> Toggle IMD Legend</a></li>
           </ul>
         </div>
       </div>
@@ -35,6 +35,7 @@
     <div id="chart_div" style="display:none;"></div>
     <div id="d3chart" style="display:none;"> </div>
     <span id="col"></span>
+    <div id="torque-time"></div>
 
     <!-- include google maps lib -->
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
@@ -68,14 +69,13 @@
         '<p class="muted">Total pop.<span class="pull-right">JSA Claimants</span></p>',
         '{{voaage_all}}<span class="pull-right">{{claimant_1}}</span>',          
         '<div class="spacer"></div>',
-        '<p class="muted">Social media activity</p>',
+        '<p class="muted">Online activity</p>',
         '<div id="chart_div" style="background: rgba(0, 0, 0);">',
 
         // SCRIPT BELLOW USES GOOGLE CHARTS API TO BUILD SOCIAL MEDIA ACTIVITY BAR CHART
-        '<script type="text/javascript">var d = parseFloat("{{tweets}}");google.charts.setOnLoadCallback(function(){var i=google.visualization.arrayToDataTable([["Tweets","Mean",{role:"style"}],["Tweets",d,"#FF0000"],["Mean", 440,"#FFFF00"]]);;var a={title:"Number of Tweets",legend: {position: "none"}, backgroundColor: {fill: "transparent", opacity: 100},legendTextStyle: { color: "#FFF" },  titleTextStyle: { color: "#FFF" }, pieHole: 0.6,vAxis : {textStyle:{color:"#FFF"}},hAxis : {textStyle:{color:"#FFF"}}},e=new google.visualization.ColumnChart(document.getElementById("chart_div"));e.draw(i,a)});',
+        '<script type="text/javascript">var d = parseFloat("{{tweets}}");google.charts.setOnLoadCallback(function(){var i=google.visualization.arrayToDataTable([["Tweets","Mean",{role:"style"}],["Tweets",d,"orangered"],["Mean", 440,"#FFFF00"]]);;var a={title:"Number of Tweets",legend: {position: "none"}, backgroundColor: {fill: "transparent", opacity: 100},legendTextStyle: { color: "#FFF" },  titleTextStyle: { color: "#FFF" }, pieHole: 0.6,vAxis : {textStyle:{color:"#FFF"}},hAxis : {textStyle:{color:"#FFF"}}},e=new google.visualization.ColumnChart(document.getElementById("chart_div"));e.draw(i,a)});',
         '</scr' + 'ipt>',
-        '</div>',
-        ''
+        '</div><p>IUC Class: {{grp_nm}}</p>',
       ].join('');
 
       // define variable for grabbing individual regions of shapefile
@@ -157,6 +157,7 @@
             }).on('error', function() {
               console.log("some error occurred");
             });
+
       }
 
       // render script when window loads
