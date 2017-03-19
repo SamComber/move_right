@@ -1,0 +1,12 @@
+---
+  title: "Assignment Two: The MAUP and Multilevel Modelling"
+output:
+  pdf_document:
+  toc: true
+number_sections: true
+bibliography: references.bib
+header-includes:
+  - \setlength\parindent{24pt}
+---
+  
+\section{Demonstrating the MAUP}
