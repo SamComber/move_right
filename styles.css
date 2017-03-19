@@ -18,7 +18,6 @@ html, body, #map {
 }
 
 div.cartodb-infobox {
-	/*background: black;*/
     background: rgba(0, 0, 0, 0.6);
     width: 300px !important;
 }
@@ -26,6 +25,10 @@ div.cartodb-infobox {
 div.cartodb-tooltip-content-wrapper {
     background: rgba(0, 0, 0, 0.3);
 	color: #fff;
+}
+
+.cartodb-timeslider {
+	background-color: #000 !important;
 }
 
 .lsoa {

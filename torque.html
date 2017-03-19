@@ -80,20 +80,37 @@
           '}'
         ].join('\n');
 
-
+      
       cartodb.createLayer(map, {
           type: "torque",
           order: 1,
           options: {
-            query: "",
+            query: "SELECT * FROM tweets_liverpool",
             table_name: "tweets_liverpool",
             user_name: "samcomber",
             tile_style: CARTOCSS
             }
         }).done(function(vis, layer) {
           map.addLayer(vis, layer);
+              
+          setInterval(function() {
+            var hour = parseInt(document.getElementsByClassName('value')[0].innerHTML);
+
+            if (hour < 12) {
+              merid = 'am';
+            } else {
+              merid = 'pm';
+            }
+
+            document.getElementsByClassName('value')[0].innerHTML = hour + merid;
+
+          }, 1200)
+
         });
+
 }
+
+
       // render script when window loads
       window.onload = main;
     </script>
