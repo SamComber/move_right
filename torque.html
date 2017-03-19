@@ -93,17 +93,21 @@
         }).done(function(vis, layer) {
           map.addLayer(vis, layer);
               
+          // dynamically add am/pm to torque output
           setInterval(function() {
             var hour = parseInt(document.getElementsByClassName('value')[0].innerHTML);
 
+            // set am/pm appropriately
             if (hour < 12) {
               merid = 'am';
             } else {
               merid = 'pm';
             }
 
+            // change innerHTML
             document.getElementsByClassName('value')[0].innerHTML = hour + merid;
 
+          // every 1.2 seconds
           }, 1200)
 
         });
