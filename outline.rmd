@@ -52,9 +52,7 @@ switch (true) {
 document.getElementById("col").style.color = col;
 ```
 
-In essence, the IMD dataset embodies the master dataframe to which we join our other sources of data (LSOA code becomes the primary key for join operations). In addition to showing IMD score, we compile LSOA-level data on the local housing market, distance-based measures to desirable local amenities, local population data, and finally online activity data from a multitude of open data sources. For example, we derive property market data from the CDRC archive of the annual median transaction value for all property types at the Land Registry and frequency of sales per year; and Valuation Office Agency (VOA) data for total homes and the most frequent property build period at LSOA geographies. 
-
-Regarding our distance measures, we use the following PostGIS spatial queries to identify nearest amenities:\footnote{School and railway station shapefiles are loaded into Carto to calculate nearest distances.} 
+Ultimately, the IMD dataset embodies the master dataframe to which we join our other sources of data (LSOA code becomes the primary key for join operations). In addition to showing IMD score, we compile LSOA-level data on the local housing market, distance-based measures to desirable local amenities, local population data, and finally online activity data from a multitude of open data sources. For example, we derive property market data from the CDRC archive of the annual median transaction value for all property types at the Land Registry and frequency of sales per year; and Valuation Office Agency (VOA) data for total homes and the most frequent property build period at LSOA geographies. Regarding our distance measures, we use the following PostGIS spatial queries to identify nearest amenities:\footnote{School and railway station shapefiles from the CDRC's Liverpool geodata pack are loaded into Carto to calculate nearest distances.} 
 
 ```{sql, eval=FALSE}
 -- distance to railway stations 
