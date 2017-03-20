@@ -25,9 +25,36 @@ This document outlines the contextual, technical and front-end decision-making t
 
 \section{Technical strategy:}
 
-As opposed to using the Carto Builder UI, we opt for the `carto.js` API to allow more flexibility to build advanced features in the dashboard. To begin with demonstrating IMD score, we use the `d3.js` library to define a scalable vector graphic (SVG) to contain a per-LSOA comparison of the IMD score to the mean score across Liverpool\footnote{Originally, this generated a MIME type error which was reported to Carto's issues stream on Github (see: \url{http://gis.stackexchange.com/questions/232159/mime-type-not-executable-error-in-cartodb}).}. In addition to showing IMD score, we compile LSOA-level data on the local housing market, distance-based measures to desirable local amenities, local population data, and finally online activity data. We derive property market data from the CDRC archive of the annual median transaction value for all property types at the Land Registry and frequency of sales per year; and Valuation Office Agency (VOA) data for total homes and the most frequent property build period for LSOA geographies. 
+As opposed to using the Carto Builder UI, we opt for the `carto.js` API to allow more flexibility to build advanced features into the dashboard. To begin with demonstrating IMD score, we use the `d3.js` library to define a scalable vector graphic (SVG) to contain a per-LSOA comparison of the IMD score to the mean score across Liverpool\footnote{Originally, this generated a MIME type error which was reported to Carto's issues stream on Github (see: \url{http://gis.stackexchange.com/questions/232159/mime-type-not-executable-error-in-cartodb}).}. In a sense, the `d3` plot removes the need for a legend because hex colours are used to colour the bars of the plot according to the break points of the quantiles defined in the Carto Builder editor (see below).
+
+
+```javascript
+switch (true) {
+    case d >= 61.1:
+        var col = "#d7191c"
+        break;
+    case d >= 49.9:
+        var col = "#fdae61";
+        break;
+    case d >= 34.9:
+        var col = "#ffffbf";
+        break;
+    case d >= 20.5:
+        var col = "#abdda4";
+        break;
+    case d >= 3:
+        var col = "#2b83ba";
+        break;
+}
+  
+// after switch statement, assignment appropriate colour
+document.getElementById("col").style.color = col;
+```
+
+In essence, the IMD dataset embodies the master dataframe to which we join our other sources of data (LSOA code becomes the primary key for join operations). In addition to showing IMD score, we compile LSOA-level data on the local housing market, distance-based measures to desirable local amenities, local population data, and finally online activity data from a multitude of open data sources. For example, we derive property market data from the CDRC archive of the annual median transaction value for all property types at the Land Registry and frequency of sales per year; and Valuation Office Agency (VOA) data for total homes and the most frequent property build period at LSOA geographies. 
 
 Regarding our distance measures, we use the following PostGIS spatial queries to identify nearest amenities:\footnote{School and railway station shapefiles are loaded into Carto to calculate nearest distances.} 
+
 
 ```sql
 -- distance to railway stations 
@@ -87,7 +114,7 @@ To access an attractive font-family, we specify an external script linking to th
 
 From our visualisation, we observe several interesting features.
 
-In summation, `Move Right` seeks to illustrate neighbourhood data using an accessible interface. Several improvements may be sought towards if `Move Right` were to be taken from staging environment to a production server.  Firstly, 
+In summation, \textbf{Move Right} seeks to illustrate neighbourhood data using an accessible interface for the end user. Yet, several improvements may be sought towards if Move Right were to be taken from a staging environment to a production server. For instance, to achieve a real-time streaming application, one might wish to set syncing intervals in which the master dataframe is updated from its various data sources. This would significantly expand the shelf-time of the application beyond the next few years. Secondly, one might seek finer granularity in the detail of the data currently visualised. For example, school and railway station names could be introduced into the output of the spatial queries, which could then be utilised to extract Ofted scores and available station facilities at this nearest local amenity. 
 
 \section{Bibliography}
 
