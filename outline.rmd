@@ -16,7 +16,16 @@ knitr::opts_chunk$set(echo = TRUE)
 
 \section{Context - Move Right:}
 
-This document outlines the context, design and technical decisions that inform the development of \textbf{Move Right}, an interactive geo-visualisation dashboard intended to project neighbourhood data to home-buyers in the metropolitan area of Liverpool. Move Right is an explorative device constructed using open data and dynamic maps to allows users to discover the most attractive locations to live relative to their personal preferences and financial opportunity. By simpling dragging the cursor over a neighbourhood demarcation, lower super output area (LSOA) boundaries can be explored in depth, providing a rich social observatory from which home-buyers, or other interested parties, can come to decisions regarding the attractiveness of neighbourhood to them.
+This document outlines the contextual, technical and front-end decision-making that informs the development of \textbf{Move Right}, an interactive geo-visualisation dashboard intended to project neighbourhood data to home-buyers in the metropolitan area of Liverpool. Move Right is an explorative device constructed using open data and dynamic maps to allows users to discover the most attractive locations to live relative to their personal preferences and financial opportunity. By simpling dragging the cursor over a neighbourhood demarcation, lower super output area (LSOA) boundaries can be explored in depth, providing a rich social observatory from which home-buyers, or other interested parties, can come to decisions regarding the attractiveness of a neighbourhood to them. An overview of Move Right is shown in \autoref{fig:base}.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics{img/example1.png}
+\caption{Baseline dashboard for Move Right.}
+\label{fig:base}
+\end{figure}
+
+\section{Technical strategy:}
 
 To demonstrate IMD score, we use the `d3.js` library **, which we populate with IMD score data hosted on the Carto database server. In addition to showing IMD score, we compile LSOA-level data on the local housing market, distance-based measures to desirable local amenities, local population data, and finally online activity data.
 
@@ -43,35 +52,7 @@ FROM   imd_2 c
 ```
 In our case, we use `ST_distance_sphere` to return the minimum distance between two geometries in metres. The output of these queries are left joined to the master dataframe to become usable in the Move Right dashboard.
 
-
-
-
-
-<!-- style bro -->
-
-Several stylistic factors contribute to the aesthetical properties of the dashboard. Firstly, the `Bootstrap` library to allow us to work within a responsive web framework that is suitable for mobile technologies. Moreover, `Bootstrap` provides glyphicons which we use to illustrate the price fluctuations 
-
-Next, as opposed to LSOA codes which are meaningless to the end user, we use the ONS best-fit lookup table between 2011 LSOA and 2015 electoral wards to project on hover place names.
-<!--
-
--- introduce story of dashboard (niche indicators etc)
-
-1) carto js api (spatial queries to find nearest schools etc)
-2) d3 js library / google charts
-3) front-end / bootstrap / montserrat google font
-4) suggested improvements
-
--->
-
-
-
-\begin{figure}[!htbp]
-\centering
-\includegraphics{img/example1.png}
-\caption{Baseline dashboard for Move Right.}
-\label{fig:base}
-\end{figure}
-
+Our final section, online activity, is intended to give the end user a sense of the 
 
 \begin{figure}[!htbp]
 \centering
@@ -80,5 +61,26 @@ Next, as opposed to LSOA codes which are meaningless to the end user, we use the
 \label{fig:torque}
 \end{figure}
 
+\section{Front-end strategy:}
 
+Several stylistic factors contribute to the aesthetical properties of the dashboard. Firstly, the `Bootstrap` library allows us to work within a responsive web framework that is suitable for mobile technologies. Moreover, `Bootstrap` provides glyphicons which we use to illustrate the price fluctuations between the median housing prices from 2014 to 2015. Here, we apply conditionally classes to the `<span id="updown">` tag in the DOM for each LSOA based on whether the previous median property sale price was higher than the current (see below).
 
+```{javascript, eval=FALSE}
+  // parse carto outputs to float
+  var t2014 = parseFloat("{{md_2014}}");
+  var t2015 = parseFloat("{{md_2015}}");
+
+  // if 2015 year of median sales is greater than 2014,
+  // set classname via javascript for up arrow, else down
+  if (t2015 > t2014) {
+      document.getElementById("updown").className = "glyphicon glyphicon-arrow-up"
+  } else {
+      document.getElementById("updown").className = "glyphicon glyphicon-arrow-down"
+  }
+```
+
+To access an attractive font-family, we specify an external script linking to the `Google Font` CDN to access the `Montserrat` font - we apply this to all HTML elements in the DOM. Next, as opposed to LSOA codes which are meaningless to the end user, we use the ONS best-fit lookup table between 2011 LSOA and 2015 electoral wards to project on hover place names. 
+
+\section{Conclusion:}
+
+In summation, `Move Right` seeks to illustrate neighbourhood data using an accessible interface. Several improvements may be sought towards if `Move Right` were to be taken from staging environment to a production server.  Firstly, 
