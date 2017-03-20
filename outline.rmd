@@ -16,7 +16,54 @@ knitr::opts_chunk$set(echo = TRUE)
 
 \section{Context - Move Right:}
 
-This document outlines the context, design and technical decisions that inform the development of \textbf{Move Right}, an interactive geo-visualisation dashboard intended to project neighbourhood data to home-buyers in the metropolitan area of Liverpool. Briefly, Move Right is an explorative device constructed using open data and dynamic maps to allows users to discover the most attractive locations to live relative to their personal preferences and financial opportunity. By simpling dragging the cursor over a neighbourhood demarcation, lower super output area (LSOA) boundaries can be explored in depth, providing a rich social observatory from which home-buyers, or other interested parties, can come to decisions regarding the attractiveness of an area to them.
+This document outlines the context, design and technical decisions that inform the development of \textbf{Move Right}, an interactive geo-visualisation dashboard intended to project neighbourhood data to home-buyers in the metropolitan area of Liverpool. Move Right is an explorative device constructed using open data and dynamic maps to allows users to discover the most attractive locations to live relative to their personal preferences and financial opportunity. By simpling dragging the cursor over a neighbourhood demarcation, lower super output area (LSOA) boundaries can be explored in depth, providing a rich social observatory from which home-buyers, or other interested parties, can come to decisions regarding the attractiveness of neighbourhood to them.
+
+To demonstrate IMD score, we use the `d3.js` library **, which we populate with IMD score data hosted on the Carto database server. In addition to showing IMD score, we compile LSOA-level data on the local housing market, distance-based measures to desirable local amenities, local population data, and finally online activity data.
+
+Regarding our distance measures, we use the following PostGIS spatial queries to identify nearest amenities:\footnote{School and railway station shapefiles are loaded into Carto to calculate nearest distances.} 
+
+
+```{sql, eval=FALSE}
+-- distance to railway stations 
+SELECT   imd_2.cartodb_id, 
+         Round(Min(St_distance_sphere(imd_2.the_geom, railway.the_geom))::numeric, 0) 
+         AS railway_dist
+FROM     imd_2, 
+         railway 
+GROUP BY imd_2.cartodb_id 
+
+-- distance to schools
+SELECT c.cartodb_id, 
+       round(st_distance_sphere( c.the_geom, 
+       ( 
+                SELECT   the_geom 
+                FROM     schools 
+                ORDER BY the_geom <-> c.the_geom limit 1) )::numeric, 0) AS school_dist 
+FROM   imd_2 c
+```
+In our case, we use `ST_distance_sphere` to return the minimum distance between two geometries in metres. The output of these queries are left joined to the master dataframe to become usable in the Move Right dashboard.
+
+
+
+
+
+<!-- style bro -->
+
+Several stylistic factors contribute to the aesthetical properties of the dashboard. Firstly, the `Bootstrap` library to allow us to work within a responsive web framework that is suitable for mobile technologies. Moreover, `Bootstrap` provides glyphicons which we use to illustrate the price fluctuations 
+
+Next, as opposed to LSOA codes which are meaningless to the end user, we use the ONS best-fit lookup table between 2011 LSOA and 2015 electoral wards to project on hover place names.
+<!--
+
+-- introduce story of dashboard (niche indicators etc)
+
+1) carto js api (spatial queries to find nearest schools etc)
+2) d3 js library / google charts
+3) front-end / bootstrap / montserrat google font
+4) suggested improvements
+
+-->
+
+
 
 \begin{figure}[!htbp]
 \centering
@@ -33,14 +80,5 @@ This document outlines the context, design and technical decisions that inform t
 \label{fig:torque}
 \end{figure}
 
-<!--
 
--- introduce story of dashboard (niche indicators etc)
-
-1) carto js api (spatial queries to find nearest schools etc)
-2) d3 js library / google charts
-3) front-end / bootstrap / montserrat google font
-4) suggested improvements
-
--->
 
