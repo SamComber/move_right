@@ -1,8 +1,7 @@
 ---
-title: "Assignment One: The MAUP and Multilevel Modelling"
+title: "Web Mapping and Analysis - Carto"
 output:
   pdf_document:
-    toc: true
     number_sections: true
 header-includes:
    - \setlength\parindent{24pt}
@@ -15,22 +14,33 @@ header-includes:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+\section{Context - Move Right:}
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+This document outlines the context, design and technical decisions that inform the development of \textbf{Move Right}, an interactive geo-visualisation dashboard intended to project neighbourhood data to home-buyers in the metropolitan area of Liverpool. Briefly, Move Right is an explorative device constructed using open data and dynamic maps to allows users to discover the most attractive locations to live relative to their personal preferences and financial opportunity. By simpling dragging the cursor over a neighbourhood demarcation, lower super output area (LSOA) boundaries can be explored in depth, providing a rich social observatory from which home-buyers, or other interested parties, can come to decisions regarding the attractiveness of an area to them.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+\begin{figure}[!htbp]
+\centering
+\includegraphics{img/example1.png}
+\caption{Baseline dashboard for Move Right.}
+\label{fig:base}
+\end{figure}
 
-```{r cars}
-summary(cars)
-```
 
-## Including Plots
+\begin{figure}[!htbp]
+\centering
+\includegraphics{img/example2.png}
+\caption{Twitter time series plot using Torque.js.}
+\label{fig:torque}
+\end{figure}
 
-You can also embed plots, for example:
+<!--
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+-- introduce story of dashboard (niche indicators etc)
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+1) carto js api (spatial queries to find nearest schools etc)
+2) d3 js library / google charts
+3) front-end / bootstrap / montserrat google font
+4) suggested improvements
+
+-->
+

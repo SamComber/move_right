@@ -35,8 +35,7 @@
     <div id="chart_div" style="display:none;"></div>
     <div id="d3chart" style="display:none;"> </div>
     <span id="col"></span>
-    <div id="torque-time"></div>
-    <div id="updown"></div>
+    <div id="updown" style="display:none;"></div>
 
     <!-- include google maps lib -->
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
@@ -165,7 +164,6 @@
       window.onload = main;
     </script>
 
-
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Latest compiled and minified JavaScript -->
@@ -173,4 +171,186 @@
   </body>
 </html>
 
+<!-- UNESCAPED/UNMIFIED CODE FOR CARTO INFOWINDOW -->
+
+<!-- <script type="text/javascript">
+
+  // parse carto outputs to float
+  var t2014 = parseFloat("{{md_2014}}");
+  var t2015 = parseFloat("{{md_2015}}");
+
+  // if 2015 year of median sales is greater than 2014,
+  // set classname via javascript for up arrow, else down
+  if (t2015 > t2014) {
+      document.getElementById("updown").className = "glyphicon glyphicon-arrow-up"
+  } else {
+      console.log("greater")
+      document.getElementById("updown").className = "glyphicon glyphicon-arrow-down"
+  }
+
+  // parse imd_score as float
+  var d = parseFloat("{{imd_score}}")
+
+  // to escape using a legend which, in my opinion, makes the map
+  // look convoluted, we assign colours to the d3 chart base on the
+  // break points for imd_score values as set in the carto ui
+  switch (true) {
+      case d >= 61.1:
+          var col = "#d7191c"
+          break;
+      case d >= 49.9:
+          var col = "#fdae61";
+          break;
+      case d >= 34.9:
+          var col = "#ffffbf";
+          break;
+      case d >= 20.5:
+          var col = "#abdda4";
+          break;
+      case d >= 3:
+          var col = "#2b83ba";
+          break;
+  }
+
+  // after switch statement, assignment appropriate colour
+  document.getElementById("col").style.color = col;
+
+  // build json array for d3 chart
+  var data = [{
+          "imd": "IMD score",
+          "value": d
+      },
+      {
+          "imd": "Mean",
+          "value": 44.10
+      }
+  ]
+
+  // set margin parameters of plot
+  var margin = {
+          top: 40,
+          right: 20,
+          bottom: 30,
+          left: 40
+      },
+      width = 200 - margin.left - margin.right,
+      height = 200 - margin.top - margin.bottom;
+
+
+  // set x bounds
+  var x = d3.scale.ordinal()
+      .rangeRoundBands([0, width], .1);
+
+  // set y bounds
+  var y = d3.scale.linear()
+      .range([height, 0]);
+
+  // build xaxis and decide orientation
+  var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("bottom")
+  // .style("color", "#FFF")
+
+  // build yaxis and decide orientation
+  var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient("left")
+
+
+  // select div container in DOM to append svg to
+  var svg = d3.select("#d3chart").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  // determine data values on xy axis
+  x.domain(data.map(function(d) {
+      return d.imd;
+  }));
+  y.domain([0, d3.max(data, function(d) {
+      return d.value;
+  })]);
+
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .style("fill", "white")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  // style svg element to fit infowindow
+  svg.append("g")
+      .style("fill", "white")
+      .attr("class", "y axis")
+      .call(yAxis)
+
+
+  // initiatie data join 
+  svg.selectAll(".bar")
+      .data(data)
+      .enter().append("rect")
+      .style("fill", col).attr("class", "bar")
+      .attr("x", function(d) {
+          return x(d.imd);
+      })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) {
+          return y(d.value);
+      })
+      .attr("height", function(d) {
+          return height - y(d.value);
+      })
+
+</script>
+
+
+<script type="text/javascript">
+
+  // parse as float so google charts api can accept value
+  var d = parseFloat("{{tweets}}");
+
+  // set onload callback that constructs datatable 
+  google.charts.setOnLoadCallback(function() {
+      var i = google.visualization.arrayToDataTable([
+          ["Tweets", "Mean", {
+              role: "style"
+          }],
+          ["Tweets", d, "orangered"],
+          ["Mean", 440, "#FFFF00"]
+      ]);
+
+      // set chart-specific styling
+      var a = {
+              title: "Number of Tweets",
+              legend: {
+                  position: "none"
+              },
+              backgroundColor: {
+                  fill: "transparent",
+                  opacity: 100
+              },
+              legendTextStyle: {
+                  color: "#FFF"
+              },
+              titleTextStyle: {
+                  color: "#FFF"
+              },
+              vAxis: {
+                  textStyle: {
+                      color: "#FFF"
+                  }
+              },
+              hAxis: {
+                  textStyle: {
+                      color: "#FFF"
+                  }
+              }
+          },
+
+      // find element in DOM and build column chart
+      e = new google.visualization.ColumnChart(document.getElementById("chart_div"));
+      e.draw(i, a);
+  });
+</script> -->
 
