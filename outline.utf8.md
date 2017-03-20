@@ -1,0 +1,96 @@
+---
+title: "Move Right - Technical Documentation"
+output:
+  pdf_document:
+    number_sections: true
+header-includes:
+   - \setlength\parindent{24pt}
+   - \usepackage[table]{xcolor}
+   - \usepackage{booktabs}
+   - \usepackage{subfig}
+---
+
+
+
+\section{Context:}
+
+This document outlines the contextual, technical and front-end decision-making that informs the development of \textbf{Move Right}, an interactive geo-visualisation dashboard intended to project neighbourhood data to home-buyers in the metropolitan area of Liverpool. Move Right is an explorative device constructed using open data and dynamic maps to allows users to discover the most attractive locations to live relative to their personal preferences and financial opportunity. By simpling dragging the cursor over a neighbourhood demarcation, lower super output area (LSOA) boundaries can be explored in depth, providing a rich social observatory from which home-buyers, or other interested parties, can come to decisions regarding the attractiveness of a neighbourhood to them. An overview of Move Right is shown in \autoref{fig:base}.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics{img/example1.png}
+\caption{Baseline dashboard for Move Right.}
+\label{fig:base}
+\end{figure}
+
+\section{Technical strategy:}
+
+As opposed to using the Carto Builder UI, we opt for the `carto.js` API to allow more flexibility to build advanced features in the dashboard. To begin with demonstrating IMD score, we use the `d3.js` library to define a scalable vector graphic (SVG) to contain a per-LSOA comparison of the IMD score to the mean score across Liverpool\footnote{Originally, this generated a MIME type error which was reported to Carto's issues stream on Github (see: \url{http://gis.stackexchange.com/questions/232159/mime-type-not-executable-error-in-cartodb}).}. In addition to showing IMD score, we compile LSOA-level data on the local housing market, distance-based measures to desirable local amenities, local population data, and finally online activity data. We derive property market data from the CDRC archive of the annual median transaction value for all property types at the Land Registry and frequency of sales per year; and Valuation Office Agency (VOA) data for total homes and the most frequent property build period for LSOA geographies. 
+
+Regarding our distance measures, we use the following PostGIS spatial queries to identify nearest amenities:\footnote{School and railway station shapefiles are loaded into Carto to calculate nearest distances.} 
+
+```sql
+-- distance to railway stations 
+SELECT   imd_2.cartodb_id, 
+         Round(Min(St_distance_sphere(imd_2.the_geom, railway.the_geom))::numeric, 0) 
+         AS railway_dist
+FROM     imd_2, 
+         railway 
+GROUP BY imd_2.cartodb_id 
+
+-- distance to schools
+SELECT c.cartodb_id, 
+       round(st_distance_sphere( c.the_geom, 
+       ( 
+                SELECT   the_geom 
+                FROM     schools 
+                ORDER BY the_geom <-> c.the_geom limit 1) )::numeric, 0) AS school_dist 
+FROM   imd_2 c
+```
+In our case, we use `ST_distance_sphere` to return the minimum distance between two geometries in metres. The output of these queries are left joined to the master dataframe to become usable in the Move Right dashboard.
+
+To obtain local population data, we use CDRC 2013 mid-year total population estimates to extract the variable for total population per neighbourhood. Moreover, to approximate unemployment rates, we query the ONS's Nomis service for Jobseeker's Allowance claimants at LSOA-level. A comparison of total population and JSA claimants provides an indication of the labour market activity of the LSOA under the user's cursor - a higher ratio of JSA claimants to residential population is implicit of high unemployment rates.
+
+Our final section, online activity, is intended to give the end user a sense of Liverpool's online activity. One might, for example, take Twitter usage and internet user classifications (IUC) as a proxy for community engagement and participation (Matthews, 2015). For the former, we use Carto's temporal mapping library extension, `Torque.js`, to generate a layercube format - a JSON representation of data with geospatial corrdinates - for displaying the temporal activity of Tweets across a 24-hour period (shown in \autoref{fig:torque}). As for the IUCs, we derive LSOA-level geodemographic classifications of digital consumers from the CDRC ckan repository, before joining them to the master dataframe.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics{img/example2.png}
+\caption{Twitter time series plot using Torque.js.}
+\label{fig:torque}
+\end{figure}
+
+\section{Front-end strategy:}
+
+Several stylistic factors contribute to the aesthetical properties of the dashboard. Firstly, we code the functionality to allow LSOA polygons to be highlighted on hover. This is achieved by creating a `featureOver` event that makes an AJAX call to the Carto SQL API for selecting the geometry of the polygon currently under the cursor. From here, we parse the data as GeoJSON and apply custom styling before adding the feature to the map. We then set the `currentHover` variable to the Carto ID of the polygon whilst the cursor remains inside that polygon to prevent additional AJAX calls. On `featureOut`, we clear layers to remove the custom styling.
+
+Next, the `Bootstrap` library allows us to work within a responsive web framework that is suitable for mobile technologies. Moreover, `Bootstrap` provides glyphicons which we use to illustrate the price fluctuations between the median housing prices from 2014 to 2015. Here, we apply conditionally classes to the `<span id="updown">` tag in the DOM for each LSOA based on whether the previous median property sale price was higher than the current (see below).
+
+
+```javascript
+  // parse carto outputs to float
+  var t2014 = parseFloat("{{md_2014}}");
+  var t2015 = parseFloat("{{md_2015}}");
+
+  // if 2015 year of median sales is greater than 2014,
+  // set classname via javascript for up arrow, else down
+  if (t2015 > t2014) {
+      document.getElementById("updown").className = "glyphicon glyphicon-arrow-up"
+  } else {
+      document.getElementById("updown").className = "glyphicon glyphicon-arrow-down"
+  }
+```
+
+To access an attractive font-family, we specify an external script linking to the `Google Font` CDN to access the `Montserrat` font - we apply this to all HTML elements in the DOM. Next, as opposed to LSOA codes which are meaningless to the end user, we use the ONS best-fit lookup table between 2011 LSOA and 2015 electoral wards to project on hover place names. 
+
+\section{Discussion and conclusion:}
+
+From our visualisation, we observe several interesting features.
+
+In summation, `Move Right` seeks to illustrate neighbourhood data using an accessible interface. Several improvements may be sought towards if `Move Right` were to be taken from staging environment to a production server.  Firstly, 
+
+\section{Bibliography}
+
+ \begin{itemize}
+   \item  Matthews, P. (2015) Neighbourhood Belonging, Social Class and Social Media - Providing Ladders tot he Cloud. \textit{Housing Studies}, Vol.30 (1), p.22-39.
+ \end{itemize}
