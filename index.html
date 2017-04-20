@@ -100,6 +100,8 @@
           attribution: 'Nokia'
         }).addTo(map);
 
+        L.control.attribution({position: 'bottomleft', prefix: ''}).addTo(map);
+
         // render layers from carto apito plot on map
         cartodb.createLayer(map, 'http://samcomber.cartodb.com/u/samcomber/api/v2/viz/e4541a6a-0969-11e7-9fa3-0e3a376473ab/viz.json')
           .addTo(map)
