@@ -36,6 +36,7 @@
     <div id="d3chart" style="display:none;"> </div>
     <span id="col"></span>
     <div id="updown" style="display:none;"></div>
+    <div id="rose"></div>
 
     <!-- include google maps lib -->
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
@@ -46,6 +47,11 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
+
+    <!-- include north arrow leaflet plugin for displaying cardinal directions -->
+    <link rel="stylesheet" href="L.Control.Rose.css" />
+    <script src="L.Control.Rose.js"></script>
+
     <script>
 
       // load google viz charts lib
@@ -95,12 +101,26 @@
           zoomControl: true
         });
 
+
+
         // use aesthetically pleasing nokia basemap
         L.tileLayer('https://maps.nlp.nokia.com/maptiler/v2/maptile/newest/normal.day.grey/{z}/{x}/{y}/256/png8?lg=eng&token=61YWYROufLu_f8ylE0vn0Q&app_id=qIWDkliFCtLntLma2e6O', {
           attribution: 'Nokia'
         }).addTo(map);
 
-        L.control.attribution({position: 'bottomleft', prefix: ''}).addTo(map);
+
+
+        /* AUXILIARY MAP COMPONENTS*/
+
+        // define north arrow
+        var rose = L.control.rose('rose', {position:'topleft', icon:'default', iSize:'medium', opacity:0.8});
+        
+        // add north arrow to map 
+        rose.addTo(map)
+
+        // add scale bar
+        L.control.scale({ position: 'topleft',
+                          maxWidth: 100}).addTo(map);
 
         // render layers from carto apito plot on map
         cartodb.createLayer(map, 'http://samcomber.cartodb.com/u/samcomber/api/v2/viz/e4541a6a-0969-11e7-9fa3-0e3a376473ab/viz.json')
@@ -154,6 +174,7 @@
                    position: 'top|right',
                    fields: [{ lsoa11cd: 'lsoa11cd' }]
               });
+
 
             // for debugging
             }).on('error', function() {

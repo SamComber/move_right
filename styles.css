@@ -168,3 +168,12 @@ div.cartodb-legend {
 .about-text {
 	text-align: justify;
 }
+
+.leaflet-control-scale-line {
+	margin-left: 10px;
+	margin-top: 10px;
+}
+
+.leaflet-control-scale-line {
+    background: rgba(255, 255, 255, 0.5) 
+}
