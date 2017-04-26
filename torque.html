@@ -46,6 +46,11 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
+
+    <!-- include north arrow leaflet plugin for displaying cardinal directions (npm install l.control.rose)-->
+    <link rel="stylesheet" href="L.Control.Rose.css" />
+    <script src="L.Control.Rose.js"></script>
+
     <script>
 
      function main() {
@@ -62,6 +67,13 @@
           attribution: 'Nokia'
         }).addTo(map);
 
+        /* AUXILIARY MAP COMPONENTS*/
+
+
+
+        // add scale bar
+        L.control.scale({ position: 'bottomright',
+                          maxWidth: 100}).addTo(map);
 
         var CARTOCSS = [
           'Map {',

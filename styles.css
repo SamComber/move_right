@@ -169,11 +169,7 @@ div.cartodb-legend {
 	text-align: justify;
 }
 
-.leaflet-control-scale-line {
-	margin-left: 10px;
-	margin-top: 10px;
-}
-
-.leaflet-control-scale-line {
-    background: rgba(255, 255, 255, 0.5) 
+.leaflet-bottom .leaflet-control-scale {
+	margin-bottom: 50px;
+	margin-right: 10px;
 }
