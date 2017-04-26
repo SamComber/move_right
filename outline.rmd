@@ -105,7 +105,7 @@ Next, the `Bootstrap` library allows us to work within a responsive web framewor
   }
 ```
 
-To access an attractive font-family, we specify an external script linking to the `Google Font` CDN to access the `Montserrat` font - we apply this to all HTML elements in the DOM. Next, as opposed to LSOA codes which are meaningless to the end user, we use the ONS best-fit lookup table between 2011 LSOA and 2015 electoral wards to project on hover place names. 
+To access an attractive font-family, we specify an external script linking to the `Google Font` CDN to access the `Montserrat` font - we apply this to all HTML elements in the DOM. Next, as opposed to LSOA codes which are meaningless to the end user, we use the ONS best-fit lookup table between 2011 LSOA and 2015 electoral wards to project on hover place names. Finally, we apply auxiliary cartographic elements such as a north arrow - installed using the `l.control.rose` package via node package manager - for displaying cardinal directions and scale bar by extending leaflet's interactive control interface. 
 
 \section{Discussion and conclusion:}
 
