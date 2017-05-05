@@ -41,10 +41,10 @@ switch (true) {
         var col = "#ffffbf";
         break;
     case d >= 20.5:
-        var col = "#abdda4";
+        var col = "#abd9e9";
         break;
     case d >= 3:
-        var col = "#2b83ba";
+        var col = "#2c7bb6";
         break;
 }
   
